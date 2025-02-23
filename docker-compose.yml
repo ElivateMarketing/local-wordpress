@@ -1,7 +1,7 @@
 services:
   db:
     # We use a mariadb image which supports both amd64 & arm64 architecture
-    image: mariadb:10.6.4-focal
+    image: mariadb:lts
     # If you really want to use MySQL, uncomment the following line
     #image: mysql:8.0.27
     command: '--default-authentication-plugin=mysql_native_password'
@@ -17,10 +17,15 @@ services:
       - 3306
       - 33060
   wordpress:
-    image: wordpress:latest
+    # image: wordpress:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - wp_data:/var/www/html
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      # Uncomment the following line if you want to mount a local plugin
+      # - ./myplugin:/var/www/html/wp-content/plugins/myplugin
     ports:
       - 80:80
     environment:
