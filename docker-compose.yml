@@ -9,43 +9,48 @@ services:
       - db_data:/var/lib/mysql
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=somewordpress
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wordpress
-      - MYSQL_PASSWORD=wordpress
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     expose:
       - 3306
       - 33060
+
   wordpress:
     # image: wordpress:latest
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - wp_data:/var/www/html
-      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-      # Uncomment the following line if you want to mount a local plugin
-      # - ./myplugin:/var/www/html/wp-content/plugins/myplugin
+      - ./wordpress:/var/www/html
+      - ./plugins:/var/www/html/wp-content/plugins/
     ports:
       - 80:80
     environment:
-      - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_USER=wordpress
-      - WORDPRESS_DB_PASSWORD=wordpress
-      - WORDPRESS_DB_NAME=wordpress
-      - WORDPRESS_DEBUG=1
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
+    depends_on:
+      - db
+
   pma:
     image: phpmyadmin/phpmyadmin
     environment:
       # https://docs.phpmyadmin.net/en/latest/setup.html#docker-environment-variables
       PMA_HOST: db
       PMA_PORT: 3306
-      MYSQL_ROOT_PASSWORD: "somewordpress"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       UPLOAD_LIMIT: 300M
     ports:
       - 8080:80
     links:
       - db:db
+    depends_on:
+      - db
+
 volumes:
   db_data:
   wp_data:
