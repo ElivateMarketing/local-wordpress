@@ -2,12 +2,12 @@
 
 namespace Test\Includes;
 
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ExcelReader {
     public function readExcelFile($filePath) {
-        $objPHPExcel = PHPExcel_IOFactory::load($filePath);
-        $sheet = $objPHPExcel->getActiveSheet();
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
         $data = $sheet->toArray(null, true, true, true);
         return $data;
     }
