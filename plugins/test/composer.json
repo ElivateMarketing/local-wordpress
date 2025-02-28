@@ -1,9 +1,4 @@
 {
-    "name": "yourname/test-plugin",
-    "description": "A test plugin for demonstration purposes.",
-    "version": "1.0.0",
-    "type": "wordpress-plugin",
-    "license": "GPL-2.0-or-later",
     "require": {
         "phpoffice/phpspreadsheet": "^1.18"
     },
