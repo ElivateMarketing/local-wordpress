@@ -9,12 +9,16 @@
  * License: GPL2
  */
 
-// Include the Composer autoload file
+// Include the Composer autoload file at this entrypoint.
+// This will allow the plugin to use the classes from the PhpSpreadsheet library.
 require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
 
+// Include the ExcelReader class. We created this class for this demonstration.
 use Test\Includes\ExcelReader;
 
-// Example usage of the ExcelReader class
+/**
+ * Adds a menu item to the admin menu.
+ */
 add_action('admin_menu', function() {
     add_menu_page('Excel Reader', 'Excel Reader', 'manage_options', 'excel-reader', function() {
         $filePath = plugin_dir_path(__FILE__) . 'example.xlsx';
